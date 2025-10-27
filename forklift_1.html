@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2015 Toyota 8FG45U Forklift • Lasha Enterprises LLC</title>
+  <meta name="color-scheme" content="dark">
+  <style>
+    :root{
+      --bg-0:#0b0d10;
+      --bg-1:#101318;
+      --bg-2:#151a21;
+      --card:#0f1115;
+      --muted:#aab3c0;
+      --text:#f4f6f8;
+      --brand:#1976ff;
+      --accent:#00e676;
+      --ring:#2a66ff55;
+      --border:#1f2630;
+      --radius:14px;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% -10%, #0d1120 0%, var(--bg-0) 40%) fixed;
+      color: var(--text);
+    }
+
+    /* Topbar (shared) */
+    .topbar{position:sticky;top:0;z-index:40;backdrop-filter:saturate(160%) blur(8px);background:linear-gradient(180deg,rgba(10,12,17,.85),rgba(10,12,17,.6));border-bottom:1px solid var(--border)}
+    .topbar-inner{max-width:1200px;margin:0 auto;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .logo{font-weight:900;letter-spacing:.3px;font-size:1.5rem;display:flex;align-items:center;gap:10px}
+    .logo .dot{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#7fb3ff,var(--brand));box-shadow:0 0 18px #2a66ff88}
+    .nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-size:.98rem}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--border);border-radius:999px;background:linear-gradient(180deg,var(--bg-1),var(--bg-2));color:var(--text);text-decoration:none;opacity:.95}
+    .cart-badge{min-width:20px;height:20px;border-radius:999px;display:inline-grid;place-items:center;background:#ff6b6b;color:#fff;font-weight:700;font-size:.8rem;padding:0 6px}
+
+    /* Header/breadcrumb */
+    header.page{max-width:1200px;margin:20px auto 0;padding:24px 16px 8px}
+    .crumbs{font-size:.92rem;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+    .crumbs a{color:inherit;text-decoration:none}
+    .crumbs span.sep{opacity:.5}
+    h1.title{margin:10px 0 0;font-size:clamp(1.4rem,1.2rem + 1.4vw,2rem)}
+
+    /* Layout */
+    .wrap{max-width:1200px;margin:0 auto;padding:16px;display:grid;grid-template-columns: 1.15fr .85fr;gap:18px}
+    @media (max-width: 1000px){ .wrap{grid-template-columns:1fr} }
+
+    /* Gallery */
+    .gallery{border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,var(--card),#0b0e14);padding:14px;box-shadow:var(--shadow)}
+    .mainimg-wrap{position:relative;aspect-ratio:4/3;background:radial-gradient(600px 300px at 60% -20%,#1a2740,#0b0e14);display:grid;place-items:center;border-radius:12px;overflow:hidden}
+    .mainimg{width:100%;height:100%;object-fit:contain;background:#fff}
+    .zoom-hint{position:absolute;right:10px;bottom:10px;font-size:.85rem;color:#d7e4ff;background:rgba(26,109,255,.15);border:1px solid #1a6dff33;padding:6px 10px;border-radius:999px}
+
+    .thumbs{margin-top:12px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+    @media (max-width:700px){ .thumbs{grid-template-columns:repeat(4,minmax(0,1fr))} }
+    .thumb{border:2px solid transparent;border-radius:10px;overflow:hidden;background:#fff;cursor:pointer}
+    .thumb img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+    .thumb.active{border-color:#3aa3ff}
+
+    /* Summary / CTAs (sticky on desktop) */
+    .summary{position:sticky;top:84px;align-self:start;border:1px solid var(--border);border-radius:var(--radius);background:linear-gradient(180deg,var(--card),#0b0e14);padding:16px;box-shadow:var(--shadow)}
+    .subtitle{color:var(--muted);margin-top:6px}
+    .price{font-size:1.6rem;font-weight:900;color:var(--accent);letter-spacing:.2px;margin:12px 0 14px}
+    .cta{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);cursor:pointer;font-weight:800}
+    .btn.primary{background:linear-gradient(180deg,#0e86ff,#0e6de2);color:#fff;border-color:#1d4ed8}
+    .btn.alt{background:linear-gradient(180deg,#0f141b,#0b0f15);color:#dbe9ff}
+    .btn.fin{background:linear-gradient(180deg,#1fa51f,#138c13);color:#fff;border:none}
+
+    /* Info blocks */
+    .block{border:1px solid var(--border);border-radius:12px;background:linear-gradient(180deg,var(--bg-2),var(--bg-1));padding:16px;box-shadow:var(--shadow)}
+    .block h2{margin:0 0 10px;font-size:1.1rem}
+
+    /* Specs table */
+    table{width:100%;border-collapse:collapse}
+    td{padding:10px 8px;border-top:1px solid var(--border);color:#dbe2ee}
+    td:first-child{color:#94a3b8;width:38%}
+
+    /* Footer */
+    footer{margin-top:28px;border-top:1px solid var(--border);background:linear-gradient(180deg,#0c1016,#0a0d12)}
+    .footer-inner{max-width:1200px;margin:0 auto;padding:24px 16px;color:var(--muted);font-size:.95rem;display:grid;gap:6px;text-align:center}
+    .footer-inner strong{color:var(--text)}
+
+    /* Focus ring */
+    .focusable:focus-visible{outline:none;box-shadow:0 0 0 4px var(--ring);border-color:transparent}
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <div class="logo" aria-label="Lasha Enterprises LLC">
+        <span class="dot" aria-hidden="true"></span>
+        <a href="index.html" style="color:inherit;text-decoration:none">Lasha Enterprises LLC</a>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <a class="pill focusable" href="index.html">📋 Inventory</a>
+        <a class="pill focusable" href="financing.html">💰 Financing</a>
+        <span class="pill">📞 <a href="tel:+18327551270" style="color:inherit;text-decoration:none">832-755-1270</a></span>
+        <span class="pill">✉️ <a href="mailto:info@lashaenterprices.com" style="color:inherit;text-decoration:none">info@lashaenterprices.com</a></span>
+        <span class="pill">🛒 <span class="cart-badge" aria-label="Items in cart">0</span></span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="index.html">Inventory</a><span class="sep">›</span>
+      <span>2015 Toyota 8FG45U Forklift</span>
+    </nav>
+    <h1 class="title">2015 Toyota 8FG45U Forklift</h1>
+  </header>
+
+  <main class="wrap" role="main">
+    <!-- LEFT: Gallery + details blocks -->
+    <section>
+      <div class="gallery" aria-label="Product gallery">
+        <div class="mainimg-wrap">
+          <img id="mainImage" class="mainimg" src="assets/s-l1600 (25).webp" alt="2015 Toyota 8FG45U forklift main image">
+          <span class="zoom-hint">Click to enlarge</span>
+        </div>
+        <div class="thumbs" id="thumbStrip">
+          <button class="thumb active focusable" aria-label="View image 1"><img src="assets/s-l1600 (23).webp" alt=""></button>
+          <button class="thumb focusable" aria-label="View image 2"><img src="assets/s-l1600 (24).webp" alt=""></button>
+          <button class="thumb focusable" aria-label="View image 3"><img src="assets/s-l1600 (25).webp" alt=""></button>
+          <button class="thumb focusable" aria-label="View image 4"><img src="assets/s-l1600 (26).webp" alt=""></button>
+          <button class="thumb focusable" aria-label="View image 5"><img src="assets/s-l1600 (27).webp" alt=""></button>
+          <button class="thumb focusable" aria-label="View image 6"><img src="assets/s-l1600 (28).webp" alt=""></button>
+        </div>
+      </div>
+
+      <div class="block" style="margin-top:14px">
+        <h2>Description</h2>
+        <p style="margin:0;color:#cfd9e6">
+          Clean, serviced unit ready for work. LP power, three-stage mast with side-shift (verify). Fresh fluids/filters and safety inspection completed.
+        </p>
+      </div>
+
+      <div class="block" style="margin-top:14px">
+        <h2>Specifications</h2>
+        <table aria-label="Specifications table">
+          <tr><td>Make</td><td>Toyota</td></tr>
+          <tr><td>Model</td><td>8FG45U</td></tr>
+          <tr><td>Year</td><td>2015</td></tr>
+          <tr><td>Power</td><td>LPG / Gas (confirm)</td></tr>
+          <tr><td>Capacity</td><td>10,000 lb (confirm)</td></tr>
+          <tr><td>Mast</td><td>3-Stage (confirm height)</td></tr>
+          <tr><td>Lift Height</td><td>— ft (fill in)</td></tr>
+          <tr><td>Forks</td><td>— in (length)</td></tr>
+          <tr><td>Attachments</td><td>Side-Shift (if equipped)</td></tr>
+          <tr><td>Hours</td><td>— (fill in)</td></tr>
+          <tr><td>Tires</td><td>Pneumatic (confirm)</td></tr>
+          <tr><td>Condition</td><td>Used, fully inspected</td></tr>
+          <tr><td>Notes</td><td>New service • Strong runner • Clean unit</td></tr>
+          <tr><td>SKU</td><td>MT-xxxx-xxxx-xxx</td></tr>
+        </table>
+      </div>
+
+      <div class="block" style="margin-top:14px">
+        <h2>Shipping & Pickup</h2>
+        <p style="margin:0;color:#cfd9e6">Nationwide freight available. We can arrange loading and delivery—ask for a quote with your ZIP code.</p>
+      </div>
+    </section>
+
+    <!-- RIGHT: Sticky summary/CTAs -->
+    <aside class="summary" aria-label="Purchase options">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <span style="display:inline-grid;place-items:center;width:28px;height:28px;border-radius:999px;background:#1fa51f;color:#fff;font-weight:900">✓</span>
+        <span style="color:#cfead8">In Stock • Ready to ship</span>
+      </div>
+      <div class="subtitle">LP • Pneumatic Tires • 3-Stage Mast • Side-Shift</div>
+      <div class="price" aria-label="Price">$16,950.00</div>
+
+      <div class="cta" style="margin-bottom:10px">
+        <button class="btn primary focusable" id="addCartBtn">Add to Cart</button>
+        <button class="btn alt focusable" id="quoteBtn">Request Quote</button>
+        <a class="btn fin focusable" href="financing.html">Apply for Financing</a>
+      </div>
+
+      <div class="block" style="margin:0">
+        <h2>Contact</h2>
+        <div style="color:#cfd9e6;display:grid;gap:6px">
+          <div>📞 <a href="tel:+18327551270" style="color:inherit">832-755-1270</a></div>
+          <div>✉️ <a href="mailto:info@lashaenterprices.com" style="color:inherit">info@lashaenterprices.com</a></div>
+          <div>📍 2290 Dickinson Ave, Dickinson, TX 77539</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <strong>Lasha Enterprises LLC</strong>
+      <span>2290 Dickinson Ave, Dickinson, TX 77539</span>
+      <span>📞 <a href="tel:+18327551270" style="color:inherit">832-755-1270</a></span>
+      <span>✉️ <a href="mailto:info@lashaenterprices.com" style="color:inherit">info@lashaenterprices.com</a></span>
+    </div>
+  </footer>
+
+  <!-- Lightweight interactions -->
+  <script>
+    // Gallery swapping + active state
+    const main = document.getElementById('mainImage');
+    const strip = document.getElementById('thumbStrip');
+    strip.addEventListener('click', (e) => {
+      const btn = e.target.closest('.thumb');
+      if(!btn) return;
+      const img = btn.querySelector('img');
+      main.src = img.src;
+      strip.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+    });
+    // Keyboard access for thumbs (Enter/Space)
+    strip.addEventListener('keydown', (e) => {
+      const btn = e.target.closest('.thumb');
+      if(!btn) return;
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        btn.click();
+      }
+    });
+
+    // Simple "lightbox" toggle (click main image to open full size in new tab)
+    document.querySelector('.mainimg-wrap').addEventListener('click', () => {
+      window.open(main.src, '_blank');
+    });
+
+    // Demo actions for CTAs
+    document.getElementById('addCartBtn').addEventListener('click', () => {
+      alert('Added to cart ✔️');
+    });
+    document.getElementById('quoteBtn').addEventListener('click', () => {
+      const subject = encodeURIComponent('Quote request: 2015 Toyota 8FG45U');
+      const body = encodeURIComponent('Hello,\n\nI would like a quote for the 2015 Toyota 8FG45U. My details:\n• Company:\n• Location (ZIP):\n• Phone:\n• Notes:\n\nThanks!');
+      window.location.href = `mailto:info@lashaenterprices.com?subject=${subject}&body=${body}`;
+    });
+  </script>
+</body>
+</html>
