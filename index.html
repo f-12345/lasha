@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lasha Enterprises LLC — Inventory</title>
+  <meta name="color-scheme" content="dark">
+  <style>
+    :root{
+      --bg-0:#0b0d10;
+      --bg-1:#101318;
+      --bg-2:#151a21;
+      --card:#0f1115;
+      --muted:#aab3c0;
+      --text:#f4f6f8;
+      --brand:#1976ff;
+      --brand-2:#00b3a4;
+      --accent:#00e676;
+      --ring:#2a66ff55;
+      --border:#1f2630;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius:14px;
+    }
+
+    * { box-sizing: border-box; }
+    html,body { height:100%; }
+    body {
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 10% -10%, #0d1120 0%, var(--bg-0) 40%) no-repeat fixed;
+      color: var(--text);
+    }
+
+    /* Top bar */
+    .topbar {
+      position: sticky; top:0; z-index: 40;
+      backdrop-filter: saturate(160%) blur(8px);
+      background: linear-gradient(180deg, rgba(10,12,17,.85), rgba(10,12,17,.6));
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1200px; margin:0 auto;
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 16px;
+      gap: 12px;
+    }
+    .logo {
+      font-weight: 900; letter-spacing:.3px; font-size: 1.5rem; line-height: 1;
+      display:flex; align-items:center; gap:10px;
+    }
+    .logo .dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #7fb3ff, var(--brand));
+      box-shadow: 0 0 18px #2a66ff88;
+    }
+    .nav {
+      display:flex; align-items:center; gap: 18px; flex-wrap: wrap;
+      font-size: 0.98rem;
+    }
+    .nav a, .nav span {
+      color: var(--text); text-decoration:none;
+      opacity:.9;
+    }
+    .pill {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid var(--border); border-radius:999px;
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+    }
+    .cart-badge {
+      min-width:20px; height:20px; border-radius:999px; display:inline-grid; place-items:center;
+      background:#ff6b6b; color:#fff; font-weight:700; font-size:.8rem; padding:0 6px;
+    }
+
+    header.page {
+      max-width: 1200px; margin: 20px auto 0; padding: 24px 16px 8px;
+    }
+    header.page h1 {
+      margin:0; font-size: clamp(1.3rem, 1.1rem + 1.2vw, 2rem);
+      letter-spacing:.2px;
+    }
+    header.page p { margin:.4rem 0 0; color: var(--muted); }
+
+    /* Layout */
+    .wrap {
+      max-width: 1200px; margin: 0 auto; padding: 16px;
+      display:grid; grid-template-columns: 280px 1fr; gap: 18px;
+    }
+    @media (max-width: 960px){
+      .wrap { grid-template-columns: 1fr; }
+    }
+
+    /* Sidebar / Filters */
+    .sidebar {
+      position: sticky; top: 76px;
+      background: linear-gradient(180deg, var(--bg-2), var(--bg-1));
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .side-head {
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+    }
+    .side-head h3 { margin:0; font-size: 1.05rem; letter-spacing:.2px; }
+    .control { margin: 10px 0 14px; }
+    label { display:block; font-size:.86rem; color: var(--muted); margin: 0 0 6px; }
+    select, button, input[type="search"] {
+      width:100%; padding: 12px 12px; border-radius: 10px; border:1px solid var(--border);
+      background: #0e1218; color: var(--text); font-size:.98rem; outline: none;
+    }
+    select:focus, input[type="search"]:focus { box-shadow: 0 0 0 4px var(--ring); border-color: transparent; }
+    .actions { display:flex; gap:10px; margin-top: 4px; }
+    .btn {
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      padding: 12px 14px; border-radius: 10px; border:1px solid var(--border); cursor:pointer;
+      background: linear-gradient(180deg, #0b1620, #0b1118);
+      color:#cfe1ff; font-weight:700; letter-spacing:.2px;
+      transition: transform .05s ease, box-shadow .15s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: linear-gradient(180deg, #1a6dff, #1858dd); color:#fff; border-color:#1d4ed8; }
+    .note { margin-top: 6px; color: var(--muted); font-size:.85rem; }
+
+    /* Inventory grid */
+    .inventory {
+      display:grid; gap: 18px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    @media (max-width: 1100px){
+      .inventory { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px){
+      .inventory { grid-template-columns: 1fr; }
+    }
+
+    .item {
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, var(--card), #0b0e14);
+      border-radius: 16px;
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      box-shadow: var(--shadow);
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .item:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0,0,0,.45); border-color:#2a3342; }
+
+    .img-wrap {
+      position: relative;
+      aspect-ratio: 4/3;
+      background: radial-gradient(600px 300px at 60% -20%, #1a2740, #0b0e14);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .item img { width:100%; height:100%; object-fit: contain; display:block; filter: saturate(1.02); }
+
+    .badge {
+      position:absolute; left:12px; top:12px;
+      background: linear-gradient(180deg, #1fa51f, #138c13);
+      color:#fff; padding:6px 10px; border-radius:999px; font-size:.75rem; font-weight:800; letter-spacing:.3px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.35), inset 0 0 0 1px #0a4;
+    }
+
+    .card-body { padding: 14px; display:flex; flex-direction:column; gap: 8px; }
+    .title { font-size: 1rem; line-height:1.35; min-height: 2.6em; }
+    .meta { display:flex; align-items:center; gap:10px; color: var(--muted); font-size:.9rem; }
+    .price { font-size: 1.4rem; font-weight: 900; color: var(--accent); letter-spacing:.2px; }
+
+    .card-actions {
+      padding: 12px 14px 16px; display:flex; gap:10px; align-items:center;
+    }
+    .btn.details {
+      flex: 1;
+      background: linear-gradient(180deg, #0e86ff, #0e6de2);
+      color: #fff; border: none; border-radius: 12px; padding: 12px 14px; font-size:1rem; font-weight:800;
+      cursor:pointer;
+    }
+    .btn.secondary {
+      background: linear-gradient(180deg, #0f141b, #0b0f15); color:#dbe9ff;
+    }
+
+    footer {
+      margin-top: 28px; border-top: 1px solid var(--border);
+      background: linear-gradient(180deg, #0c1016, #0a0d12);
+    }
+    .footer-inner {
+      max-width:1200px; margin:0 auto; padding: 24px 16px; color: var(--muted); font-size:.95rem;
+      display:grid; gap:6px;
+    }
+    .footer-inner strong { color: var(--text); }
+
+    /* Focus ring for accessibility */
+    .focusable:focus-visible { outline: none; box-shadow: 0 0 0 4px var(--ring); border-color: transparent; }
+    a.skip { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    a.skip:focus { position:static; width:auto; height:auto; padding:8px 12px; background:#111; border:1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <a class="skip" href="#inventory">Skip to inventory</a>
+
+  <!-- Topbar -->
+  <div class="topbar" role="banner">
+    <div class="topbar-inner">
+      <div class="logo" aria-label="Lasha Enterprises LLC">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Lasha Enterprises LLC</span>
+      </div>
+      <nav class="nav" aria-label="Primary">
+        <span class="pill">📋 Inventory</span>
+        <a class="pill focusable" href="financing.html">💰 Financing</a>
+        <span class="pill">📞 <a href="tel:+18327551270">832-755-1270</a></span>
+        <span class="pill">✉️ <a href="mailto:info@lashaenterprices.com">info@lashaenterprices.com</a></span>
+        <span class="pill">🛒 <span class="cart-badge" aria-label="Items in cart">0</span></span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <header class="page">
+    <h1>Inventory</h1>
+    <p>Quality forklifts and equipment. Browse, filter, and view details.</p>
+  </header>
+
+  <main class="wrap" role="main">
+    <!-- Sidebar / Filters -->
+    <aside class="sidebar" aria-label="Filters">
+      <div class="side-head"><h3>Filter & Sort</h3></div>
+
+      <div class="control">
+        <label for="search">Search</label>
+        <input id="search" class="focusable" type="search" placeholder="e.g. Sit Down, 6000 lb, Toyota">
+      </div>
+
+      <div class="control">
+        <label for="category">Category</label>
+        <select id="category" class="focusable">
+          <option value="all" selected>All</option>
+          <option value="sit-down">Sit Down Forklift</option>
+          <option value="stand-up">Stand Up / Electric</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label for="brand">Brand</label>
+        <select id="brand" class="focusable">
+          <option value="all" selected>All</option>
+          <option value="toyota">Toyota</option>
+          <option value="crown">Crown</option>
+          <option value="generic">Generic</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label for="sort">Sort</label>
+        <select id="sort" class="focusable">
+          <option value="featured" selected>Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name-asc">Name: A → Z</option>
+          <option value="name-desc">Name: Z → A</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button id="apply" class="btn primary focusable">Apply</button>
+        <button id="clear" class="btn focusable" type="button">Clear</button>
+      </div>
+      <div class="note">Tip: Cards are clickable. Use the “Details” button to open the product page.</div>
+    </aside>
+
+    <!-- Inventory -->
+    <section class="inventory" id="inventory" aria-live="polite">
+      <!-- CARD 1 -->
+      <article class="item focusable" tabindex="0"
+               data-href="forklift_1.html"
+               data-category="sit-down"
+               data-brand="toyota"
+               data-price="16950"
+               data-title="Sit Down Forklift-2015 8 fg 45 u">
+        <div class="img-wrap">
+          <span class="badge">On Sale!</span>
+          <img src="assets/s-l1600 (25).webp" alt="2015 Sit Down Forklift 8 FG 45 U">
+        </div>
+        <div class="card-body">
+          <h2 class="title">Sit Down Forklift — 2015 8 FG 45 U</h2>
+          <div class="meta">Category: Sit Down • Brand: Toyota</div>
+          <div class="price" aria-label="Price">$16,950.00</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn details" data-link>Details</button>
+          <button class="btn secondary" aria-label="Compare (not implemented)">Compare</button>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="item focusable" tabindex="0"
+               data-href="forklift_2.html"
+               data-category="sit-down"
+               data-brand="generic"
+               data-price="14900"
+               data-title="Sit Down Forklift-2016 FGCU 30 6,000 Pound">
+        <div class="img-wrap">
+          <span class="badge">On Sale!</span>
+          <img src="assets/s-l1600 (32).webp" alt="2016 Sit Down Forklift FGCU 30, 6000 lb capacity">
+        </div>
+        <div class="card-body">
+          <h2 class="title">Sit Down Forklift — 2016 FGCU 30 (6,000 lb)</h2>
+          <div class="meta">Category: Sit Down • Brand: (—)</div>
+          <div class="price">$14,900.00</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn details" data-link>Details</button>
+          <button class="btn secondary" aria-label="Compare (not implemented)">Compare</button>
+        </div>
+      </article>
+
+      <!-- PLACEHOLDER CARDS -->
+      <article class="item"
+               data-category="stand-up"
+               data-brand="crown"
+               data-price="0"
+               data-title="Coming Soon!">
+        <div class="img-wrap">
+          <span class="badge" style="background:linear-gradient(180deg,#ffb703,#ff9900)">Coming Soon</span>
+          <img src="assets/coming_soon.png" alt="Placeholder forklift, coming soon">
+        </div>
+        <div class="card-body">
+          <h2 class="title">Coming Soon!</h2>
+          <div class="meta">Category: Stand Up • Brand: Crown</div>
+          <div class="price">—</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn secondary" disabled>Details</button>
+        </div>
+      </article>
+
+      <article class="item"
+               data-category="sit-down"
+               data-brand="generic"
+               data-price="0"
+               data-title="Coming Soon!">
+        <div class="img-wrap">
+          <span class="badge" style="background:linear-gradient(180deg,#3bb273,#2b9b63)">In Stock</span>
+          <img src="assets/coming_soon.png" alt="Placeholder forklift, in stock soon">
+        </div>
+        <div class="card-body">
+          <h2 class="title">Coming Soon!</h2>
+          <div class="meta">Category: Sit Down • Brand: (—)</div>
+          <div class="price">—</div>
+        </div>
+        <div class="card-actions">
+          <button class="btn secondary" disabled>Details</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <strong>Lasha Enterprises LLC</strong>
+      <span>2290 Dickinson Ave, Dickinson, TX 77539</span>
+      <span>📞 <a href="tel:+18327551270">832-755-1270</a></span>
+      <span>✉️ <a href="mailto:info@lashaenterprices.com">info@lashaenterprices.com</a></span>
+    </div>
+  </footer>
+
+  <script>
+    // Clickable cards (keyboard + mouse), but keep the "Details" button as the main link
+    document.querySelectorAll('.item[data-href]').forEach(card => {
+      const href = card.getAttribute('data-href');
+      card.addEventListener('click', (e) => {
+        const clickedLinkBtn = e.target.closest('[data-link]');
+        if (clickedLinkBtn) {
+          window.location.href = href;
+          e.stopPropagation();
+          return;
+        }
+        // Avoid navigation if clicking disabled buttons or inside actions without data-link
+        if (e.target.closest('.card-actions') && !clickedLinkBtn) return;
+        window.location.href = href;
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+
+    // Simple filter/sort/search logic
+    const elSearch = document.getElementById('search');
+    const elCategory = document.getElementById('category');
+    const elBrand = document.getElementById('brand');
+    const elSort = document.getElementById('sort');
+    const elApply = document.getElementById('apply');
+    const elClear = document.getElementById('clear');
+    const cards = Array.from(document.querySelectorAll('.inventory .item'));
+
+    function applyFilters(){
+      const q = (elSearch.value || '').trim().toLowerCase();
+      const cat = elCategory.value;
+      const brand = elBrand.value;
+
+      cards.forEach(card => {
+        const title = (card.dataset.title || '').toLowerCase();
+        const c = card.dataset.category || 'all';
+        const b = card.dataset.brand || 'all';
+
+        const matchQ = !q || title.includes(q);
+        const matchC = (cat === 'all') || (c === cat);
+        const matchB = (brand === 'all') || (b === brand);
+
+        card.style.display = (matchQ && matchC && matchB) ? '' : 'none';
+      });
+
+      // Sorting (only visible cards)
+      const container = document.querySelector('.inventory');
+      const visible = cards.filter(c => c.style.display !== 'none');
+      const hidden = cards.filter(c => c.style.display === 'none');
+
+      visible.sort((a,b) => {
+        const ta = (a.dataset.title || '').toLowerCase();
+        const tb = (b.dataset.title || '').toLowerCase();
+        const pa = Number(a.dataset.price || 0);
+        const pb = Number(b.dataset.price || 0);
+        switch(elSort.value){
+          case 'price-asc': return pa - pb;
+          case 'price-desc': return pb - pa;
+          case 'name-asc': return ta.localeCompare(tb);
+          case 'name-desc': return tb.localeCompare(ta);
+          default: return 0; // featured
+        }
+      });
+
+      // Re-append in order
+      [...visible, ...hidden].forEach(node => container.appendChild(node));
+    }
+
+    elApply.addEventListener('click', applyFilters);
+    ['change','keyup'].forEach(evt => {
+      elSearch.addEventListener(evt, (e) => {
+        if (evt === 'keyup' && e.key !== 'Enter') return;
+        applyFilters();
+      });
+      elCategory.addEventListener(evt, applyFilters);
+      elBrand.addEventListener(evt, applyFilters);
+      elSort.addEventListener(evt, applyFilters);
+    });
+
+    elClear.addEventListener('click', () => {
+      elSearch.value = '';
+      elCategory.value = 'all';
+      elBrand.value = 'all';
+      elSort.value = 'featured';
+      applyFilters();
+    });
+
+    // Initial
+    applyFilters();
+  </script>
+</body>
+</html>
