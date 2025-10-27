@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Business Credit Application • Lasha Enterprises LLC</title>
+<style>
+  body {
+    background: url('assets/pattern2.png') repeat;
+    background-size: 150px 150px; /* Adjust tile size */
+  }
+</style>
+<style>
+  :root{
+    --bg:#1e1e1e; --panel:#141414; --line:#2a2a2a; --text:#e8e8e8; --muted:#bdbdbd;
+    --accent:#ff7a2f; --accent-2:#0e586f; --green:#13a113; --blue:#0066ff;
+  }
+
+  /* ---------- Shell ---------- */
+  body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#e8e8e8;
+  background-color:#1e1e1e; /* not 'background:' */
+}
+
+  .topbar{background:var(--red);padding:10px 20px;display:flex;align-items:center;min-height:64px;color:#fff}
+  .logo{font-size:24px;font-weight:800}
+  .right{display:flex;gap:18px;align-items:center;margin-left:auto;font-size:18px}
+  .right a{color:#fff;text-decoration:none}
+  .right a:hover{text-decoration:underline}
+  header{background:#000;text-align:center;padding:16px;font-size:24px;font-weight:700}
+
+  /* ---------- Form layout ---------- */
+  .wrap{max-width:1100px;margin:28px auto;padding:0 18px}
+  form{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px}
+
+  .row{
+    display:grid;
+    grid-template-columns:repeat(12,1fr);
+    column-gap:34px;   /* MORE side-to-side space */
+    row-gap:28px;      /* MORE top-to-bottom space */
+  }
+
+  .col-12{grid-column:span 12}
+  .col-9{grid-column:span 9}
+  .col-8{grid-column:span 8}
+  .col-6{grid-column:span 6}
+  .col-4{grid-column:span 4}
+  .col-3{grid-column:span 3}
+  .col-2{grid-column:span 2}
+
+  h2{margin:12px 0 8px 0;font-size:22px;color:#bfe9ff}
+  label{display:block;font-size:12px;color:#bbb;margin-bottom:6px}
+
+  /* single, unified control style */
+  input, select, textarea {
+    width: 97%;
+    padding: 14px;   /* less vertical padding so height shrinks */
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: #0f0f0f;
+    color: #fff;
+    margin-bottom: 12px; /* keeps space between fields */
+    font-size: 14px;     /* slightly smaller text so input shrinks more */
+    }
+
+  textarea{min-height:100px;resize:vertical}
+
+  .inline{display:flex;align-items:center;gap:10px}
+  .radio{display:flex;align-items:center;gap:18px} /* room for Yes/No */
+  .hint{font-size:12px;color:#9e9e9e;margin-top:6px}
+  .badge{display:inline-block;background:var(--accent-2);color:#e9f7fb;padding:6px 10px;border-radius:6px;font-weight:700}
+
+  .prefix{position:relative}
+  .prefix span{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#777}
+  .prefix input{padding-left:26px}
+
+  .section-equip{margin-top:24px}
+
+  .actions{display:flex;gap:10px;margin-top:16px}
+  .btn{background:var(--accent);border:none;color:#fff;padding:12px 18px;border-radius:6px;font-weight:700;cursor:pointer}
+  .btn.secondary{background:#444}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+
+  .ok{background:#0d5f0d;color:#eaffea;padding:10px;border-radius:6px;display:none;margin-top:12px}
+  .err{background:#6b1111;color:#ffeaea;padding:10px;border-radius:6px;display:none;margin-top:12px}
+
+  @media (max-width:800px){ .right{display:none} }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="logo">Lasha Enterprises LLC</div>
+    <div class="right">
+      <div>📋 <a href="index.html">Inventory</a></div>
+      <div>💰 <a href="financing.html">Financing</a></div>
+    </div>
+  </div>
+
+  <header>Business Credit Application</header>
+
+  <div class="wrap">
+    <form id="appForm">
+      <!-- Top checkboxes -->
+      <div class="row">
+        <div class="col-12 inline" style="gap:18px;">
+          <label class="inline"><input type="checkbox" name="isApplicant"> I am an Applicant</label>
+          <label class="inline"><input type="checkbox" name="isVendorAuthorized"> I am a Vendor with authorization to submit this application with information provided by the Applicant</label>
+        </div>
+      </div>
+
+      <h2>Applicant</h2>
+      <div class="row">
+        <div class="col-6">
+          <label>Business Legal Name *</label>
+          <input name="businessName" required>
+        </div>
+        <div class="col-6">
+          <label>DBA (if applicable)</label>
+          <input name="dba">
+        </div>
+
+        <div class="col-12">
+          <label>Business Street Address *</label>
+          <input name="street" required>
+        </div>
+
+        <div class="col-2">
+          <label>ZIP *</label>
+          <input name="zip" required>
+        </div>
+        <div class="col-4">
+          <label>City *</label>
+          <input name="city" required>
+        </div>
+        <div class="col-6">
+          <label>State *</label>
+          <input name="state" required>
+        </div>
+
+        <div class="col-6">
+          <label>Phone # *</label>
+          <input name="phone" required>
+        </div>
+        <div class="col-6">
+          <label>Applicant's Email *</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="col-6">
+          <label>Website</label>
+          <input name="website">
+        </div>
+        <div class="col-6">
+          <label>State of Inc./Formation</label>
+          <select name="incState">
+            <option value="">Select</option>
+            <option>TX</option><option>CA</option><option>FL</option><option>NY</option><option>Other</option>
+          </select>
+        </div>
+
+        <div class="col-6">
+          <label>Legal Structure</label>
+          <select name="structure">
+            <option>Corporation</option>
+            <option>LLC</option>
+            <option>Partnership</option>
+            <option>Sole Proprietor</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="col-6">
+          <label>Tax Id</label>
+          <input name="taxId">
+        </div>
+
+        <div class="col-4 prefix">
+          <label>Gross Annual Revenue in Prior Fiscal Year</label>
+          <span>$</span>
+          <input name="revenue" inputmode="decimal">
+        </div>
+        <div class="col-4">
+          <label># of Workers</label>
+          <input name="workers" inputmode="numeric">
+        </div>
+        <div class="col-4">
+          <label>Date Business Started Under Current Ownership</label>
+          <input name="startDate" placeholder="MM/DD/YYYY">
+        </div>
+
+        <div class="col-6">
+          <label>Industry Type</label>
+          <select name="industry">
+            <option value="">Select</option>
+            <option>Warehousing / Logistics</option>
+            <option>Manufacturing</option>
+            <option>Construction</option>
+            <option>Retail</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <h2>Equipment &amp; Vendor &nbsp;|&nbsp; <span class="badge">Vendor Code: XXXXX</span></h2>
+      <div class="row section-equip">
+        <div class="col-12">
+          <label>Equipment *</label>
+          <input name="equipment" required placeholder="Describe the equipment (make, model, qty)">
+        </div>
+
+        <div class="col-4 prefix">
+          <label>Finance Amount</label>
+          <span>$</span>
+          <input name="amount" inputmode="decimal">
+        </div>
+        <div class="col-4 prefix">
+          <label>Total Project/Equipment Cost</label>
+          <span>$</span>
+          <input name="totalCost" inputmode="decimal">
+        </div>
+        <div class="col-4">
+          <label>Term (in months)</label>
+          <select name="term">
+            <option>24</option><option>36</option><option>48</option>
+            <option selected>60</option><option>72</option><option>84</option>
+          </select>
+        </div>
+
+        <div class="col-4">
+          <label>New or Used</label>
+          <select name="condition"><option>New</option><option>Used</option></select>
+        </div>
+
+        <div class="col-8">
+          <label>Will the above address also be the equipment address?</label>
+          <div class="radio">
+            <label class="inline"><input type="radio" name="sameEquipAddress" value="Yes"> Yes</label>
+            <label class="inline"><input type="radio" name="sameEquipAddress" value="No"> No</label>
+          </div>
+        </div>
+
+        <div class="col-6">
+          <label>Vendor Name</label>
+          <input name="vendorName" value=Lasha Enterprises LLC">
+        </div>
+        <div class="col-6">
+          <label>Vendor Website</label>
+          <input name="vendorWebsite" value="https://www.lashaenterprices.com">
+        </div>
+
+        <div class="col-12">
+          <label>Additional Notes</label>
+          <textarea name="notes" placeholder="Anything else we should know?"></textarea>
+          <div class="hint">By submitting, you authorize us to contact you about this application.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" type="submit" id="submitBtn">Submit</button>
+        <button class="btn secondary" type="reset">Clear</button>
+      </div>
+
+      <div class="ok" id="ok">✅ Application sent. We’ll contact you shortly.</div>
+      <div class="err" id="err">❌ Sorry, something went wrong. Please try again.</div>
+    </form>
+  </div>
+
+<script>
+  const form = document.getElementById('appForm');
+  const ok = document.getElementById('ok');
+  const err = document.getElementById('err');
+  const btn = document.getElementById('submitBtn');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    ok.style.display = 'none';
+    err.style.display = 'none';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form).entries()))
+      });
+      if (!res.ok) throw new Error('Bad response');
+      form.reset();
+      ok.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e2) {
+      err.style.display = 'block';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
